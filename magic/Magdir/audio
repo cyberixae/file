@@ -1134,3 +1134,27 @@
 >>0	use		nintendo-3ds-bcwav-fields
 >4	beshort		0xFEFF
 >>0	use		\^nintendo-3ds-bcwav-fields
+
+# DSD Interchange File Format (DSDIFF) <https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf>
+# From: Toni Ruottu <toni.ruottu@iki.fi>
+0       string                  FRM8
+12      string                  DSD             DSDIFF audio bitstream data
+!:mime  audio/x-dff
+!:ext   dff
+>16     string                  FVER
+>28     byte                    !1              \b, unknown version
+>28     byte                    1               \b
+
+>>29    byte                    5               \b.%u
+
+# DSD Stream File (DSF) <https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf>
+# From: Toni Ruottu <toni.ruottu@iki.fi>
+0	string			DSD\x20		DSF audio bitsream data
+!:mime	audio/x-dsf
+!:ext	dsf
+>20	ulequad			0		\b, no metadata
+>20	ulequad			!0		\b, metadata (
+>>(20.q)	string		!ID3		\bunknown,
+>>>20		ulequad		x		\b foo %#llx
+>>(20.q)	indirect	x
+>>&0		string		x		\b)
