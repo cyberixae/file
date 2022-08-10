@@ -1137,15 +1137,15 @@
 
 # DSD Interchange File Format (DSDIFF) <https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf>
 # From: Toni Ruottu <toni.ruottu@iki.fi>
-0       string                  FRM8
-12      string                  DSD             DSDIFF audio bitstream data
-!:mime  audio/x-dff
-!:ext   dff
->16     string                  FVER
->28     byte                    !1              \b, unknown version
->28     byte                    1               \b
+0               string                  FRM8
+12              string                  DSD             DSDIFF audio bitstream data
+!:mime          audio/x-dff
+!:ext           dff
+>16             string                  FVER
+>28             byte                    !1              \b, unknown version
+>28             byte                    1               \b
 
->>29    byte                    5               \b.%u
+>>29            byte                    5               \b.%u
 
 # DSD Stream File (DSF) <https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf>
 # From: Toni Ruottu <toni.ruottu@iki.fi>
