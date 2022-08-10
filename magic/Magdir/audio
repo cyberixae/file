@@ -1142,18 +1142,20 @@
 !:mime          audio/x-dff
 !:ext           dff
 
->&0a            string                  FVER
+>&0             string                  FVER
 >>&8            byte                    !1              \b, unknown version
 >>&8            byte                    1               \b
 
->>>&0           default                 x               \b, 1 bit
+>>>&0           default                 x               \b, 1 bit PDM
 
 >>>&0           search/0xff             PROP
 >>>>&8          string                  SND
 
 >>>>>&0         search/0xff             CHNL
 >>>>>>&8        string                  \x00\x01                \b, mono
->>>>>>&8        string                  \x00\x02SLFTSRGT        \b, stereo
+>>>>>>&8        string                  \x00\x02
+>>>>>>>&0       string                  SLFTSRGT        \b, stereo
+>>>>>>>&0       string                  !SLFTSRGT       \b, 2ch
 >>>>>>&8        string                  \x00\x05MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20                \b, 5ch surround
 >>>>>>&8        string                  \x00\x06MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20        \b, 5.1ch surround
 >>>>>>&8        ubeshort                x                        \b, %u ch
