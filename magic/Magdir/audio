@@ -1138,14 +1138,33 @@
 # DSD Interchange File Format (DSDIFF) <https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf>
 # From: Toni Ruottu <toni.ruottu@iki.fi>
 0               string                  FRM8
-12              string                  DSD             DSDIFF audio bitstream data
+12              string                  DSD\x20         DSDIFF audio bitsream data
 !:mime          audio/x-dff
 !:ext           dff
->16             string                  FVER
->28             byte                    !1              \b, unknown version
->28             byte                    1               \b
 
->>29            byte                    5               \b.%u
+>&0a            string                  FVER
+>>&8            byte                    !1              \b, unknown version
+>>&8            byte                    1               \b
+
+>>>&0           default                 x               \b, 1 bit
+
+>>>&0           search/0xff             PROP
+>>>>&8          string                  SND
+
+>>>>>&0         search/0xff             CHNL
+>>>>>>&8        string                  \x00\x01                \b, mono
+>>>>>>&8        string                  \x00\x02SLFTSRGT        \b, stereo
+>>>>>>&8        string                  \x00\x05MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20                \b, 5ch surround
+>>>>>>&8        string                  \x00\x06MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20        \b, 5.1ch surround
+>>>>>>&8        ubeshort                x                        \b, %u ch
+
+>>>>>&0         search/0xff             FS\x20\x20
+>>>>>>&8        ubelong/0x1024          x               \b, %u kHz
+
+>>>>>&0         search/0xff             CMPR
+>>>>>>&8        string                  DSD\x20         \b, no compression
+>>>>>>&8        string                  DST\x20         \b, DST compression
+
 
 # DSD Stream File (DSF) <https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf>
 # From: Toni Ruottu <toni.ruottu@iki.fi>
