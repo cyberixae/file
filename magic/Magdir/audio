@@ -1144,21 +1144,27 @@
 
 >&0             string                  FVER
 >>&8            byte                    !1              \b, unknown version
->>&8            byte                    1               \b
+>>&8            byte                    1
 
->>>&0           default                 x               \b, 1 bit PDM
+>>>&0           default                 x               \b, 1 bit
 
 >>>&0           search/0xff             PROP
 >>>>&8          string                  SND
 
 >>>>>&0         search/0xff             CHNL
->>>>>>&8        string                  \x00\x01                \b, mono
->>>>>>&8        string                  \x00\x02
->>>>>>>&0       string                  SLFTSRGT        \b, stereo
->>>>>>>&0       string                  !SLFTSRGT       \b, 2ch
->>>>>>&8        string                  \x00\x05MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20                \b, 5ch surround
->>>>>>&8        string                  \x00\x06MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20        \b, 5.1ch surround
->>>>>>&8        ubeshort                x                        \b, %u ch
+>>>>>>&8        ubeshort		1							\b, mono
+>>>>>>&8        ubeshort		2
+>>>>>>>&0	string			SLFTSRGT   						\b, stereo
+>>>>>>>&0	string			!SLFTSRGT   						\b, 2 channels
+>>>>>>&8        ubeshort		3							\b, 3 channels
+>>>>>>&8        ubeshort		4							\b, 4 channels
+>>>>>>&8        ubeshort		5
+>>>>>>>&0	string			MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5.0 surround
+>>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5 channels
+>>>>>>&8        ubeshort		6
+>>>>>>>&0	string			MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 5.1 surround
+>>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 6 channels
+>>>>>>&8        ubeshort                >6							\b, %u channels
 
 >>>>>&0         search/0xff             FS\x20\x20
 >>>>>>&8        ubelong/0x1024          x               \b, %u kHz
