@@ -1179,9 +1179,28 @@
 0	string			DSD\x20		DSF audio bitsream data
 !:mime	audio/x-dsf
 !:ext	dsf
->20	ulequad			0		\b, no metadata
->20	ulequad			!0		\b, metadata (
->>(20.q)	string		!ID3		\bunknown,
->>>20		ulequad		x		\b foo %#llx
->>(20.q)	indirect	x
->>&0		string		x		\b)
+
+>28	string			fmt\x20
+>>&8	ulelong			!1		\b, unknown version
+>>&8	ulelong			1
+
+>>>&0	default			x		\b, 1 bit
+
+>>>&4	ulelong			1		\b, mono
+>>>&4	ulelong			2		\b, stereo
+>>>&4	ulelong			3		\b, 3.0 stereo
+>>>&4	ulelong			4		\b, 4.0 surround
+>>>&4	ulelong			5		\b, 3.1 stereo
+>>>&4	ulelong			6		\b, 5.0 surround
+>>>&4	ulelong			7		\b, 5.1 surround
+
+>>>&12	ulelong/0x1024          x               \b, %u kHz
+
+>>>&0	ulelong			0               \b, no compression
+
+>20	ulequad			!0		\b, embedded ID3
+>>(20.q)	string		!ID3		\bv2
+>>(20.q)	string		ID3             version 2
+>>>&0		byte		x		\b.%u
+>>>&1		byte		x		\b.%u
+>>&0		string		x		metadata
