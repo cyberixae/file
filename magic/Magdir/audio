@@ -1161,28 +1161,26 @@
 >>>>>>&8	ubeshort	1							\b, mono
 >>>>>>&8	ubeshort	2
 >>>>>>>&0	string		SLFTSRGT						\b, stereo
->>>>>>>&0	string		!SLFTSRGT						\b, 2 channels
+>>>>>>>&0	default		x							\b, 2 channels
 >>>>>>&8	ubeshort	3
 >>>>>>>&0	string		SLFTSRGTLFE\x20						\b, 2.1 stereo
->>>>>>>&0	string		!SLFTSRGTLFE\x20					\b, 3 channels
+>>>>>>>&0	default		x							\b, 3 channels
 >>>>>>&8	ubeshort	4
 >>>>>>>&0	string		MLFTMRGTLS\x20\x20RS\x20\x20				\b, 4.0 surround
->>>>>>>&0	string		!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 4 channels
+>>>>>>>&0	default		x							\b, 4 channels
 >>>>>>&8	ubeshort	5
 >>>>>>>&0	string		MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5.0 surround
->>>>>>>&0	string		!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5 channels
+>>>>>>>&0	default		x							\b, 5 channels
 >>>>>>&8	ubeshort	6
 >>>>>>>&0	string		MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 5.1 surround
->>>>>>>&0	string		!MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 6 channels
+>>>>>>>&0	default		x							\b, 6 channels
 >>>>>>&8	ubeshort	>6							\b, %u channels
 
 # sample rate chunk
 >>>>>&0		search/0xff	FS\x20\x20
->>>>>>&0	byte		x		\b,
->>>>>>&8	ubelong/1000000	x		%u
->>>>>>&8	ubelong%1000000	x		\b.%u MHz
->>>>>>&8	ubelong%44100	0		"DSD
->>>>>>>&-4	ubelong/44100	x		%u"
+>>>>>>&8	ubelong		x		\b, %u Hz
+>>>>>>&8	ubelong%44100	0
+>>>>>>>&-4	ubelong/44100	x		"DSD %u"
 
 # compression type chunk
 >>>>>&0		search/0xff	CMPR
@@ -1191,7 +1189,6 @@
 
 # edited master information chunk
 >>>>>&0		search		DIIN		\b, EM metadata
-
 
 # Sony DSF audio format (Direct Stream Digital Stream File)
 # Used for lossless digital storage of songs produced as DSD audio
@@ -1221,18 +1218,16 @@
 >>>&4		ulelong		7		\b, 5.1 surround
 
 # sample rate chunk
->>>&12		ulelong/1000000	x		\b, %u
->>>&12		ulelong%1000000	x		\b.%u MHz
->>>&12		ulelong%44100	0		"DSD
->>>>&-4		ulelong/44100	x		%u"
+>>>&12		ulelong		x		\b, %u Hz
+>>>&12		ulelong%44100	0
+>>>>&-4		ulelong/44100	x		"DSD %u"
 
 # compression
 >>>&0		ulelong		0		\b, no compression
 
 # embedded ID3v2 metadata
 >20		ulequad		!0		\b, ID3
->>(20.q)	string		!ID3		\bv2
 >>(20.q)	string		ID3		version 2
 >>>&0		byte		x		\b.%u
 >>>&1		byte		x		\b.%u
->>0		byte		x		embed
+>>0		default		x		\bv2
