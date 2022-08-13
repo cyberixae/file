@@ -1140,7 +1140,7 @@
 # https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf
 # From: Toni Ruottu <toni.ruottu@iki.fi>
 0		string		FRM8
-12		string		DSD\x20		DSDIFF audio bitsream data
+12		string		DSD\x20		DSDIFF audio bitstream data
 !:mime		audio/x-dff
 !:ext		dff
 
@@ -1203,7 +1203,7 @@
 # Portable analog of a track stored on a Super Audio CD (SACD)
 # https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf
 # From: Toni Ruottu <toni.ruottu@iki.fi>
-0		string		DSD\x20		DSF audio bitsream data
+0		string		DSD\x20		DSF audio bitstream data
 !:mime		audio/x-dsf
 !:ext		dsf
 
