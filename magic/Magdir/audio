@@ -1189,7 +1189,8 @@
 >>>>>>&8	string		DST\x20		\b, DST compression
 
 # edited master information chunk
->>>>>&0		search		DIIN		\b, EM metadata
+>>>>>&0		search		DIIN
+>>>>>>&0	ubequad		>0		\b, EM metadata
 
 # format version > 1 or 0
 >>&0		default		x		\b, unknown version
