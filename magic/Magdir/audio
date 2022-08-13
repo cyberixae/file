@@ -1135,78 +1135,97 @@
 >4	beshort		0xFEFF
 >>0	use		\^nintendo-3ds-bcwav-fields
 
-# DSD Interchange File Format (DSDIFF) <https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf>
+# Philips DSDIFF audio format (Direct Stream Digital Interchange File Format)
+# Used for DSD audio recordings and Super Audio CD (SACD) mastering annotations
+# https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf
 # From: Toni Ruottu <toni.ruottu@iki.fi>
-0		string			FRM8
-12		string			DSD\x20							DSDIFF audio bitsream data
+0		string		FRM8
+12		string		DSD\x20		DSDIFF audio bitsream data
 !:mime		audio/x-dff
 !:ext		dff
 
->&0		string			FVER
->>&8		byte			!1							\b, unknown version
->>&8		byte			1
+# format version chunk
+>&0		string		FVER
+>>&8		byte		!1		\b, unknown version
+>>&8		byte		1
 
->>>&0		default			x							\b, 1 bit
+# sampling resolution ( 1 bit PDM only )
+>>>&0		default		x		\b, 1 bit
 
->>>&0		search/0xff		PROP
->>>>&8		string			SND
+# sound property chunk
+>>>&0		search/0xff	PROP
+>>>>&8		string		SND
 
->>>>>&0		search/0xff		CHNL
->>>>>>&8	ubeshort		1							\b, mono
->>>>>>&8	ubeshort		2
->>>>>>>&0	string			SLFTSRGT						\b, stereo
->>>>>>>&0	string			!SLFTSRGT						\b, 2 channels
->>>>>>&8	ubeshort		3
->>>>>>>&0	string			SLFTSRGTLFE\x20						\b, 2.1 stereo
->>>>>>>&0	string			!SLFTSRGTLFE\x20					\b, 3 channels
->>>>>>&8	ubeshort		4
->>>>>>>&0	string			MLFTMRGTLS\x20\x20RS\x20\x20				\b, 4.0 surround
->>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 4 channels
->>>>>>&8	ubeshort		5
->>>>>>>&0	string			MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5.0 surround
->>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5 channels
->>>>>>&8	ubeshort		6
->>>>>>>&0	string			MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 5.1 surround
->>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 6 channels
->>>>>>&8	ubeshort		>6							\b, %u channels
+# channel configuration
+>>>>>&0		search/0xff	CHNL
+>>>>>>&8	ubeshort	1							\b, mono
+>>>>>>&8	ubeshort	2
+>>>>>>>&0	string		SLFTSRGT						\b, stereo
+>>>>>>>&0	string		!SLFTSRGT						\b, 2 channels
+>>>>>>&8	ubeshort	3
+>>>>>>>&0	string		SLFTSRGTLFE\x20						\b, 2.1 stereo
+>>>>>>>&0	string		!SLFTSRGTLFE\x20					\b, 3 channels
+>>>>>>&8	ubeshort	4
+>>>>>>>&0	string		MLFTMRGTLS\x20\x20RS\x20\x20				\b, 4.0 surround
+>>>>>>>&0	string		!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 4 channels
+>>>>>>&8	ubeshort	5
+>>>>>>>&0	string		MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5.0 surround
+>>>>>>>&0	string		!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5 channels
+>>>>>>&8	ubeshort	6
+>>>>>>>&0	string		MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 5.1 surround
+>>>>>>>&0	string		!MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 6 channels
+>>>>>>&8	ubeshort	>6							\b, %u channels
 
->>>>>&0		search/0xff		FS\x20\x20
->>>>>>&8	ubelong/0x1024		x							\b, %u kHz
+# sample rate chunk
+>>>>>&0		search/0xff	FS\x20\x20
+>>>>>>&8	ubelong/0x1024	x		\b, %u kHz
 
->>>>>&0		search/0xff		CMPR
->>>>>>&8	string			DSD\x20							\b, no compression
->>>>>>&8	string			DST\x20							\b, DST compression
+# compression type chunk
+>>>>>&0		search/0xff	CMPR
+>>>>>>&8	string		DSD\x20		\b, no compression
+>>>>>>&8	string		DST\x20		\b, DST compression
 
->>>>>&0		search			DIIN							\b, EM metadata
+# edited master information chunk
+>>>>>&0		search		DIIN		\b, EM metadata
 
 
-# DSD Stream File (DSF) <https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf>
+# Sony DSF audio format (Direct Stream Digital Stream File)
+# Used for lossless digital storage of songs produced as DSD audio
+# Portable analog of a track stored on a Super Audio CD (SACD)
+# https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf
 # From: Toni Ruottu <toni.ruottu@iki.fi>
-0	string			DSD\x20		DSF audio bitsream data
-!:mime	audio/x-dsf
-!:ext	dsf
+0		string		DSD\x20		DSF audio bitsream data
+!:mime		audio/x-dsf
+!:ext		dsf
 
->28	string			fmt\x20
->>&8	ulelong			!1		\b, unknown version
->>&8	ulelong			1
+# format chunk
+>28		string		fmt\x20
+>>&8		ulelong		!1		\b, unknown version
+>>&8		ulelong		1
 
->>>&0	default			x		\b, 1 bit
+# sampling resolution ( 1 bit PDM only )
+# NOTE: the spec incorrectly uses "bits per sample" instead of "bits per byte"
+>>>&0		default		x		\b, 1 bit
 
->>>&4	ulelong			1		\b, mono
->>>&4	ulelong			2		\b, stereo
->>>&4	ulelong			3		\b, 3.0 stereo
->>>&4	ulelong			4		\b, 4.0 surround
->>>&4	ulelong			5		\b, 3.1 stereo
->>>&4	ulelong			6		\b, 5.0 surround
->>>&4	ulelong			7		\b, 5.1 surround
+# channel configuration
+>>>&4		ulelong		1		\b, mono
+>>>&4		ulelong		2		\b, stereo
+>>>&4		ulelong		3		\b, 3.0 stereo
+>>>&4		ulelong		4		\b, 4.0 surround
+>>>&4		ulelong		5		\b, 3.1 stereo
+>>>&4		ulelong		6		\b, 5.0 surround
+>>>&4		ulelong		7		\b, 5.1 surround
 
->>>&12	ulelong/0x1024		x		\b, %u kHz
+# sample rate chunk
+>>>&12		ulelong/0x1024	x		\b, %u kHz
 
->>>&0	ulelong			0		\b, no compression
+# compression
+>>>&0		ulelong		0		\b, no compression
 
->20	ulequad			!0		\b, ID3
+# embedded ID3v2 metadata
+>20		ulequad		!0		\b, ID3
 >>(20.q)	string		!ID3		\bv2
 >>(20.q)	string		ID3		version 2
 >>>&0		byte		x		\b.%u
 >>>&1		byte		x		\b.%u
->>&0		string		x		embed
+>>&0		default		x		embed
