@@ -1137,41 +1137,47 @@
 
 # DSD Interchange File Format (DSDIFF) <https://dsd-guide.com/sites/default/files/white-papers/DSDIFF_1.5_Spec.pdf>
 # From: Toni Ruottu <toni.ruottu@iki.fi>
-0               string                  FRM8
-12              string                  DSD\x20         DSDIFF audio bitsream data
-!:mime          audio/x-dff
-!:ext           dff
+0		string			FRM8
+12		string			DSD\x20							DSDIFF audio bitsream data
+!:mime		audio/x-dff
+!:ext		dff
 
->&0             string                  FVER
->>&8            byte                    !1              \b, unknown version
->>&8            byte                    1
+>&0		string			FVER
+>>&8		byte			!1							\b, unknown version
+>>&8		byte			1
 
->>>&0           default                 x               \b, 1 bit
+>>>&0		default			x							\b, 1 bit
 
->>>&0           search/0xff             PROP
->>>>&8          string                  SND
+>>>&0		search/0xff		PROP
+>>>>&8		string			SND
 
->>>>>&0         search/0xff             CHNL
->>>>>>&8        ubeshort		1							\b, mono
->>>>>>&8        ubeshort		2
->>>>>>>&0	string			SLFTSRGT   						\b, stereo
->>>>>>>&0	string			!SLFTSRGT   						\b, 2 channels
->>>>>>&8        ubeshort		3							\b, 3 channels
->>>>>>&8        ubeshort		4							\b, 4 channels
->>>>>>&8        ubeshort		5
+>>>>>&0		search/0xff		CHNL
+>>>>>>&8	ubeshort		1							\b, mono
+>>>>>>&8	ubeshort		2
+>>>>>>>&0	string			SLFTSRGT						\b, stereo
+>>>>>>>&0	string			!SLFTSRGT						\b, 2 channels
+>>>>>>&8	ubeshort		3
+>>>>>>>&0	string			SLFTSRGTLFE\x20						\b, 2.1 stereo
+>>>>>>>&0	string			!SLFTSRGTLFE\x20					\b, 3 channels
+>>>>>>&8	ubeshort		4
+>>>>>>>&0	string			MLFTMRGTLS\x20\x20RS\x20\x20				\b, 4.0 surround
+>>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 4 channels
+>>>>>>&8	ubeshort		5
 >>>>>>>&0	string			MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5.0 surround
 >>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5 channels
->>>>>>&8        ubeshort		6
+>>>>>>&8	ubeshort		6
 >>>>>>>&0	string			MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 5.1 surround
 >>>>>>>&0	string			!MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 6 channels
->>>>>>&8        ubeshort                >6							\b, %u channels
+>>>>>>&8	ubeshort		>6							\b, %u channels
 
->>>>>&0         search/0xff             FS\x20\x20
->>>>>>&8        ubelong/0x1024          x               \b, %u kHz
+>>>>>&0		search/0xff		FS\x20\x20
+>>>>>>&8	ubelong/0x1024		x							\b, %u kHz
 
->>>>>&0         search/0xff             CMPR
->>>>>>&8        string                  DSD\x20         \b, no compression
->>>>>>&8        string                  DST\x20         \b, DST compression
+>>>>>&0		search/0xff		CMPR
+>>>>>>&8	string			DSD\x20							\b, no compression
+>>>>>>&8	string			DST\x20							\b, DST compression
+
+>>>>>&0		search			DIIN							\b, EM metadata
 
 
 # DSD Stream File (DSF) <https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf>
@@ -1194,13 +1200,13 @@
 >>>&4	ulelong			6		\b, 5.0 surround
 >>>&4	ulelong			7		\b, 5.1 surround
 
->>>&12	ulelong/0x1024          x               \b, %u kHz
+>>>&12	ulelong/0x1024		x		\b, %u kHz
 
->>>&0	ulelong			0               \b, no compression
+>>>&0	ulelong			0		\b, no compression
 
->20	ulequad			!0		\b, embedded ID3
+>20	ulequad			!0		\b, ID3
 >>(20.q)	string		!ID3		\bv2
->>(20.q)	string		ID3             version 2
+>>(20.q)	string		ID3		version 2
 >>>&0		byte		x		\b.%u
 >>>&1		byte		x		\b.%u
->>&0		string		x		metadata
+>>&0		string		x		embed
