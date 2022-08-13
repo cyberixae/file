@@ -1150,7 +1150,7 @@
 >>&8		byte		1
 
 # sampling resolution ( 1 bit PDM only )
->>>&0		default		x		\b, 1 bit
+>>>&0		byte		x		\b, 1 bit
 
 # sound property chunk
 >>>&0		search/0xff	PROP
@@ -1178,7 +1178,11 @@
 
 # sample rate chunk
 >>>>>&0		search/0xff	FS\x20\x20
->>>>>>&8	ubelong/0x1024	x		\b, %u kHz
+>>>>>>&0	byte		x		\b,
+>>>>>>&8	ubelong/1000000	x		%u
+>>>>>>&8	ubelong%1000000	x		\b.%u MHz
+>>>>>>&8	ubelong%44100	0		"DSD
+>>>>>>>&-4	ubelong/44100	x		%u"
 
 # compression type chunk
 >>>>>&0		search/0xff	CMPR
@@ -1205,7 +1209,7 @@
 
 # sampling resolution ( 1 bit PDM only )
 # NOTE: the spec incorrectly uses "bits per sample" instead of "bits per byte"
->>>&0		default		x		\b, 1 bit
+>>>0		byte		x		\b, 1 bit
 
 # channel configuration
 >>>&4		ulelong		1		\b, mono
@@ -1217,7 +1221,10 @@
 >>>&4		ulelong		7		\b, 5.1 surround
 
 # sample rate chunk
->>>&12		ulelong/0x1024	x		\b, %u kHz
+>>>&12		ulelong/1000000	x		\b, %u
+>>>&12		ulelong%1000000	x		\b.%u MHz
+>>>&12		ulelong%44100	0		"DSD
+>>>>&-4		ulelong/44100	x		%u"
 
 # compression
 >>>&0		ulelong		0		\b, no compression
@@ -1228,4 +1235,4 @@
 >>(20.q)	string		ID3		version 2
 >>>&0		byte		x		\b.%u
 >>>&1		byte		x		\b.%u
->>&0		default		x		embed
+>>0		byte		x		embed
