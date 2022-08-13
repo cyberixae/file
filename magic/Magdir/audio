@@ -1164,12 +1164,15 @@
 >>>>>>>&0	default		x							\b, 2 channels
 >>>>>>&8	ubeshort	3
 >>>>>>>&0	string		SLFTSRGTLFE\x20						\b, 2.1 stereo
+>>>>>>>&0	string		SLFTSRGTC\x20\x20\x20					\b, 3.0 stereo
 >>>>>>>&0	default		x							\b, 3 channels
 >>>>>>&8	ubeshort	4
 >>>>>>>&0	string		MLFTMRGTLS\x20\x20RS\x20\x20				\b, 4.0 surround
+>>>>>>>&0	string		SLFTSRGTC\x20\x20\x20LFE\x20				\b, 3.1 stereo
 >>>>>>>&0	default		x							\b, 4 channels
 >>>>>>&8	ubeshort	5
 >>>>>>>&0	string		MLFTMRGTC\x20\x20\x20LS\x20\x20RS\x20\x20		\b, 5.0 surround
+>>>>>>>&0	string		MLFTMRGTLFE\x20LS\x20\x20RS\x20\x20			\b, 4.1 surround
 >>>>>>>&0	default		x							\b, 5 channels
 >>>>>>&8	ubeshort	6
 >>>>>>>&0	string		MLFTMRGTC\x20\x20\x20LFE\x20LS\x20\x20RS\x20\x20	\b, 5.1 surround
