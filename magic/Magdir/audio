@@ -1146,17 +1146,17 @@
 
 # format version chunk
 >&0		string		FVER
-# format version 1
+# version 1
 >>&8		byte		1
 
-# sampling resolution ( 1 bit PDM only )
+# v1 / sampling resolution ( 1 bit PDM only )
 >>>&0		string		x		\b, 1 bit
 
-# sound property chunk
+# v1 / sound property chunk
 >>>&0		search/0xff	PROP
 >>>>&8		string		SND
 
-# channel configuration
+# v1 / sound property chunk / channel configuration chunk
 >>>>>&0		search/0xff	CHNL
 >>>>>>&8	ubeshort	1							\b, mono
 >>>>>>&8	ubeshort	2
@@ -1179,32 +1179,35 @@
 >>>>>>>&0	default		x							\b, 6 channels
 >>>>>>&8	ubeshort	>6							\b, %u channels
 
-# sample rate chunk
+# v1 / sound property chunk / sample rate chunk
 >>>>>&0		search/0xff	FS\x20\x20
 >>>>>>&0	string		x		\b,
 >>>>>>&8	ubelong%44100	0
 >>>>>>>&-4	ubelong/44100	x		"DSD %u"
 >>>>>>>&-4	ubelong		x		%u Hz
 
-# compression type chunk
+# v1 / sound property chunk / compression type chunk
 >>>>>&0		search/0xff	CMPR
 >>>>>>&8	string		DSD\x20		\b, no compression
 >>>>>>&8	string		DST\x20		\b, DST compression
 
-# edited master information chunk
->>>>>&0		search		DIIN
->>>>>>&0	ubequad		>0		\b, EM metadata
+# v1 / quest for metadata
+>>>&0		string		x
 
-# ID3 extension chunk, defacto standard, not part of the spec
->>>>>&0		string		x
->>>>>>&0	search		ID3\x20
->>>>>>>&8	string		ID3		ID3 version 2
->>>>>>>&0	byte		x		\b.%u
->>>>>>>&1	byte		x		\b.%u
->>>>>>&0	default		x
->>>>>>>4	ubequad		>1048576	\b, ID3 potential, try -P bytes=%llu to perform ID3 search
+# v1 / quest for metadata / edited master information chunk
+>>>>&0		search		DIIN
+>>>>>&0		ubequad		>0		\b, "edited master" metadata
 
-# format version > 1 or 0
+# v1 / quest for metadata / ID3 chunk ( defacto standard )
+>>>>&0		search		ID3\x20
+>>>>>&8		string		ID3		\b, ID3 version 2
+>>>>>&0		byte		x		\b.%u
+>>>>>&1		byte		x		\b.%u
+
+# v1 / quest for metadata / failure ( possibly due to -P bytes=... being too low )
+>>>>&0		default		x		\b, ID3 missing (or unreachable)
+
+# version > 1 or 0
 >>&0		default		x		\b, unknown version
 
 # Sony DSF audio format (Direct Stream Digital Stream File)
@@ -1218,14 +1221,14 @@
 
 # format chunk
 >28		string		fmt\x20
-# format version 1
+# version 1
 >>&8		ulelong		1
 
-# sampling resolution ( 1 bit PDM only )
+# v1 / sampling resolution ( 1 bit PDM only )
 # NOTE: the spec incorrectly uses "bits per sample" instead of "bits per byte"
 >>>&0		string		x		\b, 1 bit
 
-# channel configuration
+# v1 / channel configuration
 >>>>&4		ulelong		1		\b, mono
 >>>>&4		ulelong		2		\b, stereo
 >>>>&4		ulelong		3		\b, 3.0 stereo
@@ -1236,22 +1239,24 @@
 >>>>&0		default		x
 >>>>>&4		ulelong		x		\b, %u channels
 
-# sample rate chunk
+# v1 / sample rate chunk
 >>>>&0		string		x		\b,
 >>>>&12		ulelong%44100	0
 >>>>>&-4	ulelong/44100	x		"DSD %u"
 >>>>&12		ulelong		x		%u Hz
 
-# compression
+# v1 / compression
 >>>>&0		ulelong		0		\b, no compression
 
-# embedded ID3v2 metadata
->>>20		ulequad		!0		\b, ID3
->>>>(20.q)	string		ID3		version 2
->>>>>&0		byte		x		\b.%u
->>>>>&1		byte		x		\b.%u
->>>>&0		default		x		unreachable
->>>>>20		ulequad+5	x		\b, try -P bytes=%llu
+# v1 / embedded ID3v2 metadata
+>>>0		string		x 		\b, ID3
+>>>>20		ulequad		!0
+>>>>>(20.q)	string		ID3		version 2
+>>>>>>&0		byte		x		\b.%u
+>>>>>>&1		byte		x		\b.%u
+# unable to verify ID3 ( possibly due to -P bytes=... being too low )
+>>>>>&0		default		x		unreachable
+>>>>&0		default		x		missing
 
-# format version > 1 or 0
+# version > 1 or 0
 >>&0		default		x		\b, unknown version
