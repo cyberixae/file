@@ -1255,8 +1255,8 @@
 >>>0		string		x 		\b, ID3
 >>>>20		ulequad		!0
 >>>>>(20.q)	string		ID3		version 2
->>>>>>&0		byte		x		\b.%u
->>>>>>&1		byte		x		\b.%u
+>>>>>>&0	byte		x		\b.%u
+>>>>>>&1	byte		x		\b.%u
 # unable to verify ID3 ( possibly due to -P bytes=... being too low )
 >>>>>&0		default		x		unreachable
 >>>>&0		default		x		missing
