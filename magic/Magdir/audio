@@ -1190,6 +1190,7 @@
 >>>>>&0		search/0xff	CMPR
 >>>>>>&8	string		DSD\x20		\b, no compression
 >>>>>>&8	string		DST\x20		\b, DST compression
+>>>>>>&8	default		x		\b, unknown compression
 
 # v1 / quest for metadata
 >>>&0		string		x
@@ -1246,7 +1247,9 @@
 >>>>&12		ulelong		x		%u Hz
 
 # v1 / compression
->>>>&0		ulelong		0		\b, no compression
+>>>>&0		string		x
+>>>>>&0		ulelong		0		\b, no compression
+>>>>>&0		default		x		\b, unknown compression
 
 # v1 / embedded ID3v2 metadata
 >>>0		string		x 		\b, ID3
