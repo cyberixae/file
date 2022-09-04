@@ -1,0 +1,29 @@
+
+# WavPack
+# https://wavpack.com/
+# From: Toni Ruottu <toni.ruottu@iki.fi>
+
+0x2c		string		wvpk
+>&-4		indirect	x
+
+0		string		wvpk		WavPack audio bitstream data
+!:mime          audio/x-wavpack
+!:ext           wv
+>&4		uleshort	0x0001		\b, ver %#x
+>&4		uleshort	0x0002		\b, ver %#x
+>>&0		uleshort	x		\b, %u bits
+>&4		uleshort	0x0003		\b, ver %#x
+>>&0		uleshort	x		\b, %u bits
+>>&2		uleshort&1	0		\b, stereo
+>>&2		uleshort&1	1		\b, mono
+>>&2		uleshort	x		\b, flags ( %#x )
+>&4		uleshort	0x0402		\b, ver %#x
+>&4		uleshort	0x0403		\b, ver %#x
+>&4		uleshort	0x0404		\b, ver %#x
+>&4		uleshort	0x0405		\b, ver %#x
+>&4		uleshort	0x0406		\b, ver %#x
+>&4		uleshort	0x0407		\b, ver %#x
+>&4		uleshort	0x0408		\b, ver %#x
+>&4		uleshort	0x0409		\b, ver %#x
+>&4		uleshort	0x0410		\b, ver %#x
+>&4		default		x		\b, unknown version
