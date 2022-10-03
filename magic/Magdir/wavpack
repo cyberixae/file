@@ -6,8 +6,21 @@
 # Skip RIFF header ( some old encoder versions leave precompression RIFF header at index 0 )
 
 0		string			RIFF
->&0		search			wvpk
->>&-4		indirect		x
+>&0		search			wvpk		WavPack audio bitstream               data
+!:mime          audio/x-wavpack
+!:ext           wv
+#
+>>&4		uleshort&0xff		x		v0.%u
+>>>34		uleshort		x		\b, %u bit
+>>>22		uleshort		1		\b, mono
+>>>22		uleshort		2		\b, stereo
+>>>24		uleshort		x		\b, %u Hz
+>>&4		uleshort&0xff		>1
+>>>&0		uleshort		0		\b, lossless
+>>>&0		default			x		\b, dunno
+
+
+#>>&-4		indirect		x
 #>>>&0		string			x		\b, RIFF wrapper
 #>>>&0		search			INFO
 #>>>>&-12	string			LIST		\b, RIFF metadata
@@ -19,15 +32,15 @@
 >&4		uleshort/0xff		0		WavPack audio bitstream               data
 !:mime          audio/x-wavpack
 !:ext           wv
-#		v0.%u
->>&-2		uleshort&0xff		x
+#
+>>&-2		uleshort&0xff		x		v0.%u
 >>&-2		uleshort&0xff		>2
->>>&2		uleshort&0x04		0		\b, 16 bit
->>>&2		uleshort&0x04		!0		\b, ? bit
->>>&2		uleshort&0x01		0		\b, stereo
->>>&2		uleshort&0x01		!0		\b, mono
->>>&2		uleshort&0x04		0		\b, 44100 Hz
->>>&2		uleshort&0x04		!0		\b, unknown Hz
+>>>&2		uleshort&0x0004		0		\b, ? bit
+>>>&2		uleshort&0x0004		!0		\b, 16 bit
+>>>&2		uleshort&0x0001		0		\b, stereo
+>>>&2		uleshort&0x0001		!0		\b, mono
+>>>&2		uleshort&0x0004		0		\b, unknown Hz
+>>>&2		uleshort&0x0004		!0		\b, 44100 Hz
 >>&-2		uleshort&0xff		>1
 >>>&0		uleshort		0		\b, lossless
 >>>&0		default			x		\b, dunno
@@ -51,8 +64,8 @@
 >>&10		ulelong			0
 >>>(4.l+8)	indirect		x
 >>&10		default			x
-#		v4.%u
->>>&-12		uleshort&0xff		x
+#
+>>>&-12		uleshort&0xff		x		v4.%u
 >>>>24		ulelong			&0x80000000	\b, 1 bit
 >>>>>24		ulelong&0x00000004	0x00000004	\b, mono
 >>>>>24		ulelong&0x40000004	0x00000000	\b, stereo
