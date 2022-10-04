@@ -15,10 +15,10 @@
 >>>>&6		uleshort		1		\b, mono
 >>>>&6		uleshort		2		\b, stereo
 >>>>&8		uleshort		x		\b, %u Hz
->>&4		uleshort&0xff		<2		\b, lossless compression
 >>&4		uleshort&0xff		>1
 >>>&0		uleshort		0		\b, lossless compression
 >>>&0		default			x		\b, lossy or hybrid compression
+>>&4		uleshort&0xff		<2		\b, lossless compression
 
 
 #>>&-4		indirect		x
