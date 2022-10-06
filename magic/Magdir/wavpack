@@ -61,11 +61,13 @@
 # wv 0.x raw / compression settings
 >>&0		string
 # only lossless compression was supported before 0.2
->>&-2		uleshort&0xff		<2		\b, lossless compression
->>&0		default			x
+>>>&0		uleshort&0xff		<2		\b, lossless compression
+>>>&0		default			x
 # wv 0.2+ raw / infer compression from "bits" field in header
->>>&0		uleshort		0		\b, lossless compression
->>>&0		default			x		\b, lossy or hybrid compression
+>>>>&2		uleshort		0		\b, lossless compression
+>>>>&2		default			x		\b, lossy or hybrid compression
+
+
 
 
 
