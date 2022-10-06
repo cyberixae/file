@@ -7,22 +7,30 @@
 
 0		string			RIFF
 >&0		search			wvpk		WavPack audio bitstream data
-# wv 0.x ( wvc files never had RIFF header)
-!:mime          audio/x-wavpack
+
+# v0 ( correction files had no header, so has to be audio )
+
 !:ext           wv
+!:mime          audio/x-wavpack
 
-# wv 0.x / minor version
-#		v0.%u
->>&4		uleshort&0xff		x
+# minor version
+>>&4		string
+#>>>&0		uleshort&0xff		x		v0.%u
 
-# wv 0.x / format (from RIFF header)
+# v0 stored format in RIFF header
 >>>12		search			fmt\x20
+
+# bit depth
 >>>>&18		uleshort		x		\b, %u bit
+
+# channels
 >>>>&6		uleshort		1		\b, mono
 >>>>&6		uleshort		2		\b, stereo
+
+# sample rate
 >>>>&8		uleshort		x		\b, %u Hz
 
-# wv 0.x / compression settings
+# v0 / compression settings
 >>&4		string
 # only lossless compression was supported before 0.2
 >>>&0		uleshort&0xff		<2		\b, lossless compression
@@ -31,10 +39,9 @@
 >>>>&2		uleshort		0		\b, lossless compression
 >>>>&2		default			x		\b, lossy or hybrid compression
 
-#>>&-4		indirect		x
-#>>>&0		string			x		\b, RIFF wrapper
-#>>>&0		search			INFO
-#>>>>&-12	string			LIST		\b, RIFF metadata
+>>&0		string			x		\b, RIFF wrapper
+>>&0		search			INFO
+>>>&-12		string			LIST		\b, RIFF metadata
 
 
 # WavPack without RIFF header ( WavPack versions 4-5, and version 3 in raw mode )
@@ -42,25 +49,26 @@
 0		string			wvpk
 
 >&4		uleshort/0xff		0		WavPack audio bitstream data
-# wv 0.x raw ( wvc 0.x files had no header )
-!:mime          audio/x-wavpack
+
+# v0 raw ( correction files had no header, so has to be audio )
+
 !:ext           wv
+!:mime          audio/x-wavpack
 
-# wv 0.x raw / minor version
-#		v0.%u
->>&-2		uleshort&0xff		x
+# minor version
+>>&0		string
+#>>>&-2		uleshort&0xff		x		v0.%u
 
-# wv 0.x raw / format
-# bit depth is always 16 in 0.x raw mode
->>>&0		string 			x		\b, 16 bit
+# bit depth (always 16 in v0 raw mode)
+>>&0		string 			x		\b, 16 bit
 # mono indicator was added in version 0.3
 >>&-2		uleshort&0xff		>2
 >>>&2		uleshort&0x0001		0		\b, stereo
 >>>&2		uleshort&0x0001		!0		\b, mono
-# sample rate is always 44100 in 0.x raw mode
->>>&0		string 			x		\b, 44100 Hz
+# sample rate (always 44100 in v0 raw mode)
+>>&0		string 			x		\b, 44100 Hz
 
-# wv 0.x raw / compression settings
+# v0 raw / compression settings
 >>&0		string
 # only lossless compression was supported before 0.2
 >>>&0		uleshort&0xff		<2		\b, lossless compression
@@ -75,11 +83,13 @@
 
 
 # raw v0 / quest for metadata / ID3 tag
+
 #>>&0		search		ID3		\b, ID3 version 2
 #>>>&0		byte		x		\b.%u
 #>>>&1		byte		x		\b.%u
 
 # raw v0 / quest for metadata / APE tag
+
 #>>&0		search		APETAGEX	\b, APE
 #>>>&0		uleshort/1000	x		version %u
 #>>>>&0		uleshort%1000	x		\b.%u
@@ -88,90 +98,89 @@
 
 # v4
 
->>&10		ulelong			0
+# skip non-audio blocks
+>>&10		ulelong		0
+>>>(4.l+8)	indirect	x
+>>&10		default		x
 
-# v4 / non-audio block
+# v4 / file type
 
-# skip non-audio block in hopes next block has audio
->>>(4.l+8)	indirect		x
-
->>&10		default			x
-
-# v4 / first audio block
-
-# file type
 >>>24		ulelong&0x00000008	0x00000000	WavPack audio bitstream data
-# lossless files are always wv
-!:mime	audio/x-wavpack
+# lossless files are always audio files
 !:ext	wv
+!:mime	audio/x-wavpack
 >>>24		default 		x		WavPack audio bitstream (correction?) data
-# hybrid files could be either wv or wvc
+# hybrid files could be either audio files or correction files
+!:ext	wv/wvc
 #!:mime	audio/x-wavpack
 #!:mime	audio/x-wavpack-correction
-!:ext	wv/wvc
 
 # minor version
-#		v4.%u
->>8	uleshort&0xff		x
+>>>8	string
+#>>>>&0	uleshort&0xff		x		v4.%u
+
+# v4 / audio format
 
 # bit depth
->>>24	ulelong			&0x80000000
+>>>8	string
+>>>>24	ulelong			&0x80000000
 # DSD bit depth
->>>>&0	string			x		\b, 1 bit
->>>24	default 		x
+>>>>>&0	string			x		\b, 1 bit
+>>>>24	default 		x
 # PCM bit depth
->>>>24	ulelong&0x00000003	0x00000000	\b, 8 bit
->>>>24	ulelong&0x00000003	0x00000001	\b, 16 bit
->>>>24	ulelong&0x00000003	0x00000002	\b, 24 bit
->>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
+>>>>>24	ulelong&0x00000003	0x00000000	\b, 8 bit
+>>>>>24	ulelong&0x00000003	0x00000001	\b, 16 bit
+>>>>>24	ulelong&0x00000003	0x00000002	\b, 24 bit
+>>>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
 
 # channels
->>>24	ulelong&0x00000004	0x00000004	\b, mono
->>>24	ulelong&0x40000004	0x00000000	\b, stereo
->>>24	ulelong&0x40000004	0x40000000	\b, false stereo
+>>>>24	ulelong&0x00000004	0x00000004	\b, mono
+>>>>24	ulelong&0x40000004	0x00000000	\b, stereo
+>>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
 
 # sample rate
+>>>>&0	string
+>>>>>24	ulelong			&0x80000000
+# DSD sample rate
+# sub block storing DSD sample rates is hard to reach
+>>>>>>24	string		x		\b, unknown Hz
+>>>>>24		default 	x
+# PCM sample rate
 # if we are lucky the input has one of these default sample rates
->>>24	ulelong&0x07800000	0x00000000	\b, 6000 Hz
->>>24	ulelong&0x07800000	0x00800000	\b, 8000 Hz
->>>24	ulelong&0x07800000	0x01000000	\b, 9600 Hz
->>>24	ulelong&0x07800000	0x01800000	\b, 11025 Hz
->>>24	ulelong&0x07800000	0x02000000	\b, 12000 Hz
->>>24	ulelong&0x07800000	0x02800000	\b, 16000 Hz
->>>24	ulelong&0x07800000	0x03000000	\b, 22050 Hz
->>>24	ulelong&0x07800000	0x03800000	\b, 24000 Hz
->>>24	ulelong&0x07800000	0x04000000	\b, 32000 Hz
->>>24	ulelong&0x07800000	0x04800000	\b, 44100 Hz
->>>24	ulelong&0x07800000	0x05000000	\b, 48000 Hz
->>>24	ulelong&0x07800000	0x05800000	\b, 64000 Hz
->>>24	ulelong&0x07800000	0x06000000	\b, 88200 Hz
->>>24	ulelong&0x07800000	0x06800000	\b, 96000 Hz
->>>24	ulelong&0x07800000	0x07000000	\b, 192000 Hz
+>>>>>>24	ulelong&0x07800000	0x00000000	\b, 6000 Hz
+>>>>>>24	ulelong&0x07800000	0x00800000	\b, 8000 Hz
+>>>>>>24	ulelong&0x07800000	0x01000000	\b, 9600 Hz
+>>>>>>24	ulelong&0x07800000	0x01800000	\b, 11025 Hz
+>>>>>>24	ulelong&0x07800000	0x02000000	\b, 12000 Hz
+>>>>>>24	ulelong&0x07800000	0x02800000	\b, 16000 Hz
+>>>>>>24	ulelong&0x07800000	0x03000000	\b, 22050 Hz
+>>>>>>24	ulelong&0x07800000	0x03800000	\b, 24000 Hz
+>>>>>>24	ulelong&0x07800000	0x04000000	\b, 32000 Hz
+>>>>>>24	ulelong&0x07800000	0x04800000	\b, 44100 Hz
+>>>>>>24	ulelong&0x07800000	0x05000000	\b, 48000 Hz
+>>>>>>24	ulelong&0x07800000	0x05800000	\b, 64000 Hz
+>>>>>>24	ulelong&0x07800000	0x06000000	\b, 88200 Hz
+>>>>>>24	ulelong&0x07800000	0x06800000	\b, 96000 Hz
+>>>>>>24	ulelong&0x07800000	0x07000000	\b, 192000 Hz
 # sub block storing custom sample rates is hard to reach
->>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
+>>>>>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
 
 # compression
->>>24	ulelong&0x00000008	0x00000000	\b, lossless compression
->>>24	ulelong&0x00000008	0x00000008	\b, hybrid compression
+>>>>24		ulelong&0x00000008	0x00000000	\b, lossless compression
+>>>>24		ulelong&0x00000008	0x00000008	\b, hybrid compression
 
 # first sub block
 #>>>>32	ubyte			x		( 1sb %#x )
 
-
-
-
-
-
-
 # v4 / quest for metadata / ID3 tag
-#>>&0		search		ID3		\b, ID3 version 2
-#>>>&0		byte		x		\b.%u
-#>>>&1		byte		x		\b.%u
+>>&0		search		ID3		\b, ID3 version 2
+>>>&0		byte		x		\b.%u
+>>>&1		byte		x		\b.%u
 
 # v4 / quest for metadata / APE tag
-#>>&0		search		APETAGEX	\b, APE
-#>>>&0		uleshort/1000	x		version %u
-#>>>>&0		uleshort%1000	x		\b.%u
+>>&0		search		APETAGEX	\b, APE
+>>>&0		uleshort/1000	x		version %u
+>>>>&0		uleshort%1000	x		\b.%u
 
-
->&4		default			x		\b, unknown version
+# So far WavPack 1-5 have produced only v0 and v4.
+>&4		default		x		\b, unknown version
