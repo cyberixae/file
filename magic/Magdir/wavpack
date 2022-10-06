@@ -15,7 +15,7 @@
 
 # minor version ( for debugging )
 >>&4		string
-#>>>&0		uleshort&0xff		x		v0.%u
+>>>&0		uleshort&0xff		x		v0.%u
 
 # v0 / audio format
 
@@ -85,7 +85,7 @@
 
 # minor version ( for debugging )
 >>&0		string
-#>>>&-2		uleshort&0xff		x		v0.%u
+>>>&-2		uleshort&0xff		x		v0.%u
 
 # v0 raw / audio format
 
@@ -154,7 +154,7 @@
 
 # minor version ( for debugging )
 >>>8	string
-#>>>>&0	uleshort&0xff		x		v4.%u
+>>>>&0	uleshort&0xff		x		v4.%u
 
 # v4 / audio format
 
@@ -207,7 +207,7 @@
 >>>>24		ulelong&0x00000008	0x00000008	\b, hybrid compression
 
 # first sub block
-#>>>>32	ubyte			x		( 1sb %#x )
+>>>>>32		ubyte			x		( 1sb: %#x )
 
 # v4 / quest for metadata
 >>>&0		string
