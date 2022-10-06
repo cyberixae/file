@@ -17,7 +17,9 @@
 >>&4		string
 #>>>&0		uleshort&0xff		x		v0.%u
 
-# v0 stored format in RIFF header
+# v0 / audio format
+
+# read format from RIFF header
 >>>12		search			fmt\x20
 
 # bit depth
@@ -30,7 +32,7 @@
 # sample rate
 >>>>&8		uleshort		x		\b, %u Hz
 
-# v0 / compression settings
+# compression settings
 >>&4		string
 # only lossless compression was supported before 0.2
 >>>&0		uleshort&0xff		<2		\b, lossless compression
@@ -39,7 +41,7 @@
 >>>>&2		uleshort		0		\b, lossless compression
 >>>>&2		default			x		\b, lossy or hybrid compression
 
->>&0		string			x		\b, RIFF wrapper
+>>&0		string			x		\b, RIFF header
 >>&0		search			INFO
 >>>&-12		string			LIST		\b, RIFF metadata
 
@@ -59,6 +61,8 @@
 >>&0		string
 #>>>&-2		uleshort&0xff		x		v0.%u
 
+# v0 raw / audio format
+
 # bit depth (always 16 in v0 raw mode)
 >>&0		string 			x		\b, 16 bit
 # mono indicator was added in version 0.3
@@ -68,31 +72,26 @@
 # sample rate (always 44100 in v0 raw mode)
 >>&0		string 			x		\b, 44100 Hz
 
-# v0 raw / compression settings
+# compression settings
 >>&0		string
 # only lossless compression was supported before 0.2
 >>>&0		uleshort&0xff		<2		\b, lossless compression
 >>>&0		default			x
-# wv 0.2+ raw / infer compression from "bits" field in header
+# infer compression from "bits" field in header
 >>>>&2		uleshort		0		\b, lossless compression
 >>>>&2		default			x		\b, lossy or hybrid compression
 
-
-
-
-
-
 # raw v0 / quest for metadata / ID3 tag
 
-#>>&0		search		ID3		\b, ID3 version 2
-#>>>&0		byte		x		\b.%u
-#>>>&1		byte		x		\b.%u
+>>&0		search		ID3		\b, ID3 version 2
+>>>&0		byte		x		\b.%u
+>>>&1		byte		x		\b.%u
 
 # raw v0 / quest for metadata / APE tag
 
-#>>&0		search		APETAGEX	\b, APE
-#>>>&0		uleshort/1000	x		version %u
-#>>>>&0		uleshort%1000	x		\b.%u
+>>&0		search		APETAGEX	\b, APE
+>>>&0		uleshort/1000	x		version %u
+>>>>&0		uleshort%1000	x		\b.%u
 
 >8		uleshort/0xff		4
 
