@@ -12,7 +12,8 @@
 !:ext           wv
 
 # wv 0.x / minor version
->>&4		uleshort&0xff		x		v0.%u
+#		v0.%u
+>>&4		uleshort&0xff		x
 
 # wv 0.x / format (from RIFF header)
 >>>12		search			fmt\x20
@@ -46,7 +47,8 @@
 !:ext           wv
 
 # wv 0.x raw / minor version
->>&-2		uleshort&0xff		x		v0.%u
+#		v0.%u
+>>&-2		uleshort&0xff		x
 
 # wv 0.x raw / format
 # bit depth is always 16 in 0.x raw mode
@@ -97,118 +99,63 @@
 
 # v4 / first audio block
 
+# file type
 >>>24		ulelong&0x00000008	0x00000000	WavPack audio bitstream data
-
-# v4 / first audio block / lossless compression
-
+# lossless files are always wv
 !:mime	audio/x-wavpack
 !:ext	wv
-
->>>>8		uleshort&0xff		x		v4.%u
-
->>>>>24		ulelong			&0x80000000
-
-# v4 / first audio block / lossless compression / DSD
-
-# DSD always has bit depth of 1 bit
->>>>>>&0	string			x		\b, 1 bit
->>>>>>24	ulelong&0x00000004	0x00000004	\b, mono
->>>>>>24	ulelong&0x40000004	0x00000000	\b, stereo
->>>>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
-# sub block storing custom sample rates is hard to reach
->>>>>>&0	string			x		\b, unknown Hz
-# we already checked for lossless compression earlier
->>>>>>&0	string			x		\b, lossless compression
-
->>>>>24		default 		x
-
-# v4 / first audio block / lossless compression / PCM
-
->>>>>>24	ulelong&0x00000003	0x00000000	\b, 8 bit
->>>>>>24	ulelong&0x00000003	0x00000001	\b, 16 bit
->>>>>>24	ulelong&0x00000003	0x00000002	\b, 24 bit
->>>>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
->>>>>>24	ulelong&0x00000004	0x00000004	\b, mono
->>>>>>24	ulelong&0x40000004	0x00000000	\b, stereo
->>>>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
-# if we are lucky the input has one of these default sample rates
->>>>>>24	ulelong&0x07800000	0x00000000	\b, 6000 Hz
->>>>>>24	ulelong&0x07800000	0x00800000	\b, 8000 Hz
->>>>>>24	ulelong&0x07800000	0x01000000	\b, 9600 Hz
->>>>>>24	ulelong&0x07800000	0x01800000	\b, 11025 Hz
->>>>>>24	ulelong&0x07800000	0x02000000	\b, 12000 Hz
->>>>>>24	ulelong&0x07800000	0x02800000	\b, 16000 Hz
->>>>>>24	ulelong&0x07800000	0x03000000	\b, 22050 Hz
->>>>>>24	ulelong&0x07800000	0x03800000	\b, 24000 Hz
->>>>>>24	ulelong&0x07800000	0x04000000	\b, 32000 Hz
->>>>>>24	ulelong&0x07800000	0x04800000	\b, 44100 Hz
->>>>>>24	ulelong&0x07800000	0x05000000	\b, 48000 Hz
->>>>>>24	ulelong&0x07800000	0x05800000	\b, 64000 Hz
->>>>>>24	ulelong&0x07800000	0x06000000	\b, 88200 Hz
->>>>>>24	ulelong&0x07800000	0x06800000	\b, 96000 Hz
->>>>>>24	ulelong&0x07800000	0x07000000	\b, 192000 Hz
-# sub block storing custom sample rates is hard to reach
->>>>>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
->>>>>>&0	string			x		\b, lossless compression
-
 >>>24		default 		x		WavPack audio bitstream (correction?) data
-
-# v4 / first audio block / hybrid compression
-
+# hybrid files could be either wv or wvc
 #!:mime	audio/x-wavpack
 #!:mime	audio/x-wavpack-correction
 !:ext	wv/wvc
 
->>>>8		uleshort&0xff		x		v4.%u
+# minor version
+#		v4.%u
+>>8	uleshort&0xff		x
 
->>>>>24		ulelong			&0x80000000
+# bit depth
+>>>24	ulelong			&0x80000000
+# DSD bit depth
+>>>>&0	string			x		\b, 1 bit
+>>>24	default 		x
+# PCM bit depth
+>>>>24	ulelong&0x00000003	0x00000000	\b, 8 bit
+>>>>24	ulelong&0x00000003	0x00000001	\b, 16 bit
+>>>>24	ulelong&0x00000003	0x00000002	\b, 24 bit
+>>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
 
-# v4 / first audio block / hybrid compression / DSD
+# channels
+>>>24	ulelong&0x00000004	0x00000004	\b, mono
+>>>24	ulelong&0x40000004	0x00000000	\b, stereo
+>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
 
-# DSD always has bit depth of 1 bit
->>>>>>&0	string			x		\b, 1 bit
->>>>>>24	ulelong&0x00000004	0x00000004	\b, mono
->>>>>>24	ulelong&0x40000004	0x00000000	\b, stereo
->>>>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
-# sub block storing custom sample rates is hard to reach
->>>>>>&0	string			x		\b, unknown Hz
-# we already checked for hybrid compression earlier
->>>>>>&0	string			x		\b, hybrid compression
-
->>>>>24		default 		x
-
-# v4 / first audio block / hybrid compression / PCM
-
->>>>>>24	ulelong&0x00000003	0x00000000	\b, 8 bit
->>>>>>24	ulelong&0x00000003	0x00000001	\b, 16 bit
->>>>>>24	ulelong&0x00000003	0x00000002	\b, 24 bit
->>>>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
->>>>>>24	ulelong&0x00000004	0x00000004	\b, mono
->>>>>>24	ulelong&0x40000004	0x00000000	\b, stereo
->>>>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
+# sample rate
 # if we are lucky the input has one of these default sample rates
->>>>>>24	ulelong&0x07800000	0x00000000	\b, 6000 Hz
->>>>>>24	ulelong&0x07800000	0x00800000	\b, 8000 Hz
->>>>>>24	ulelong&0x07800000	0x01000000	\b, 9600 Hz
->>>>>>24	ulelong&0x07800000	0x01800000	\b, 11025 Hz
->>>>>>24	ulelong&0x07800000	0x02000000	\b, 12000 Hz
->>>>>>24	ulelong&0x07800000	0x02800000	\b, 16000 Hz
->>>>>>24	ulelong&0x07800000	0x03000000	\b, 22050 Hz
->>>>>>24	ulelong&0x07800000	0x03800000	\b, 24000 Hz
->>>>>>24	ulelong&0x07800000	0x04000000	\b, 32000 Hz
->>>>>>24	ulelong&0x07800000	0x04800000	\b, 44100 Hz
->>>>>>24	ulelong&0x07800000	0x05000000	\b, 48000 Hz
->>>>>>24	ulelong&0x07800000	0x05800000	\b, 64000 Hz
->>>>>>24	ulelong&0x07800000	0x06000000	\b, 88200 Hz
->>>>>>24	ulelong&0x07800000	0x06800000	\b, 96000 Hz
->>>>>>24	ulelong&0x07800000	0x07000000	\b, 192000 Hz
+>>>24	ulelong&0x07800000	0x00000000	\b, 6000 Hz
+>>>24	ulelong&0x07800000	0x00800000	\b, 8000 Hz
+>>>24	ulelong&0x07800000	0x01000000	\b, 9600 Hz
+>>>24	ulelong&0x07800000	0x01800000	\b, 11025 Hz
+>>>24	ulelong&0x07800000	0x02000000	\b, 12000 Hz
+>>>24	ulelong&0x07800000	0x02800000	\b, 16000 Hz
+>>>24	ulelong&0x07800000	0x03000000	\b, 22050 Hz
+>>>24	ulelong&0x07800000	0x03800000	\b, 24000 Hz
+>>>24	ulelong&0x07800000	0x04000000	\b, 32000 Hz
+>>>24	ulelong&0x07800000	0x04800000	\b, 44100 Hz
+>>>24	ulelong&0x07800000	0x05000000	\b, 48000 Hz
+>>>24	ulelong&0x07800000	0x05800000	\b, 64000 Hz
+>>>24	ulelong&0x07800000	0x06000000	\b, 88200 Hz
+>>>24	ulelong&0x07800000	0x06800000	\b, 96000 Hz
+>>>24	ulelong&0x07800000	0x07000000	\b, 192000 Hz
 # sub block storing custom sample rates is hard to reach
->>>>>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
->>>>>>&0	string			x		\b, hybrid compression
-#>>>>>32		ubyte			x		( sub block %#x )
+>>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
 
+# compression
+>>>24	ulelong&0x00000008	0x00000000	\b, lossless compression
+>>>24	ulelong&0x00000008	0x00000008	\b, hybrid compression
 
-
+# first sub block
+#>>>>32	ubyte			x		( 1sb %#x )
 
 
 
