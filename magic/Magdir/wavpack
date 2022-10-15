@@ -189,9 +189,13 @@
 >>>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
 
 # channels
->>>>24	ulelong&0x00000004	0x00000004	\b, mono
->>>>24	ulelong&0x40000004	0x00000000	\b, stereo
->>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
+>>>>&0		string
+>>>>>24		ulelong&0x00001800	0x00001800
+# single mono/stereo block
+>>>>>>24	ulelong&0x00000004	0x00000004	\b, mono
+>>>>>>24	ulelong&0x40000004	0x00000000	\b, stereo
+>>>>>>24	ulelong&0x40000004	0x40000000	\b, false stereo
+>>>>>24		default			x		\b, multichannel
 
 # sample rate
 >>>>&0	string
