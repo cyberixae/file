@@ -146,11 +146,20 @@
 # lossless files are always audio files
 !:ext	wv
 !:mime	audio/x-wavpack
->>>24		default 		x		WavPack audio bitstream (correction?) data
-# hybrid files could be either audio files or correction files
-!:ext	wv/wvc
-#!:mime	audio/x-wavpack
-#!:mime	audio/x-wavpack-correction
+>>>24		default			x
+>>>>32		ubyte			0x7		WavPack audio bitstream correction data
+# hybrid files with initial sub block 0x7 are correction files
+!:ext	wvc
+!:mime	audio/x-wavpack-correction
+>>>>32		ubyte			0xb		WavPack audio bitstream correction data
+# hybrid files with initial sub block 0xb are correction files
+!:ext	wvc
+!:mime	audio/x-wavpack-correction
+>>>>32		default 		x		WavPack audio bitstream data
+# hybrid files with other initial sub blocks are audio files
+!:ext	wv
+!:mime	audio/x-wavpack
+
 
 # minor version ( for debugging )
 >>>8	string
@@ -205,9 +214,6 @@
 # compression
 >>>>24		ulelong&0x00000008	0x00000000	\b, lossless compression
 >>>>24		ulelong&0x00000008	0x00000008	\b, hybrid compression
-
-# first sub block
->>>>>32		ubyte			x		( 1sb: %#x )
 
 # v4 / quest for metadata
 >>>&0		string
