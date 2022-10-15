@@ -39,7 +39,7 @@
 >>>&0		default			x
 # infer compression from "bits" field in header
 >>>>&2		uleshort		0		\b, lossless compression
->>>>&2		default			x		\b, lossy or hybrid compression
+>>>>&2		default			x		\b, lossy compression
 
 # encoder version
 >>&4		uleshort&0xff		x		\b, encoder version %u
@@ -109,7 +109,7 @@
 >>>&0		default			x
 # infer compression from "bits" field in header
 >>>>&2		uleshort		0		\b, lossless compression
->>>>&2		default			x		\b, lossy or hybrid compression
+>>>>&2		default			x		\b, lossy compression
 
 
 # encoder version
@@ -221,7 +221,13 @@
 
 # compression
 >>>>24		ulelong&0x00000008	0x00000000	\b, lossless compression
->>>>24		ulelong&0x00000008	0x00000008	\b, hybrid compression
+>>>>24		ulelong&0x00000008	0x00000008
+>>>>>32		ubyte			0x7
+# correction file ( omit output )
+>>>>>32		ubyte			0xb
+# correction file ( omit output )
+>>>>>32		default 		x		\b, lossy compression
+
 
 # encoder version
 >>>&0		string
