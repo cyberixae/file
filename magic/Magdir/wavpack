@@ -202,7 +202,23 @@
 >>>>>24	ulelong			&0x80000000
 # DSD sample rate
 # sub block storing DSD sample rates is hard to reach
->>>>>>24	string		x		\b, unknown Hz
+>>>>>>24	ulelong&0x07800000	0x00000000	\b, 192000 Hz
+>>>>>>24	ulelong&0x07800000	0x00800000	\b, 256000 Hz
+>>>>>>24	ulelong&0x07800000	0x01000000	\b, 307200 Hz
+>>>>>>24	ulelong&0x07800000	0x01800000	\b, "DSD8" 352800 Hz
+>>>>>>24	ulelong&0x07800000	0x02000000	\b, 384000 Hz
+>>>>>>24	ulelong&0x07800000	0x02800000	\b, 512000 Hz
+>>>>>>24	ulelong&0x07800000	0x03000000	\b, "DSD16" 705600 Hz
+>>>>>>24	ulelong&0x07800000	0x03800000	\b, 768000 Hz
+>>>>>>24	ulelong&0x07800000	0x04000000	\b, 1024000 Hz
+>>>>>>24	ulelong&0x07800000	0x04800000	\b, "DSD32" 1411200 Hz
+>>>>>>24	ulelong&0x07800000	0x05000000	\b, 1536000 Hz
+>>>>>>24	ulelong&0x07800000	0x05800000	\b, 2048000 Hz
+>>>>>>24	ulelong&0x07800000	0x06000000	\b, "DSD64" 2822400 Hz
+>>>>>>24	ulelong&0x07800000	0x06800000	\b, 3072000 Hz
+>>>>>>24	ulelong&0x07800000	0x07000000	\b, 6144000 Hz
+# sub block storing custom sample rates is hard to reach
+>>>>>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
 >>>>>24		default 	x
 # PCM sample rate
 # if we are lucky the input has one of these default sample rates
