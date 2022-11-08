@@ -219,9 +219,9 @@
 # dsd sub block
 >>>>>>>>>>>>>>>>&3	ubyte		2	\b, "DSD 64" 2822400 Hz
 >>>>>>>>>>>>>>>>&3	ubyte		3	\b, "DSD 128" 5644800 Hz
->>>>>>>>>>>>>>>>&3	ubyte		4	\b, "DSD 256" 8467200 Hz
->>>>>>>>>>>>>>>>&3	ubyte		5	\b, "DSD 512" 11289600 Hz
->>>>>>>>>>>>>>>>&3	ubyte		6	\b, "DSD 1024" 22579200 Hz
+>>>>>>>>>>>>>>>>&3	ubyte		4	\b, "DSD 256" 11289600 Hz
+>>>>>>>>>>>>>>>>&3	ubyte		5	\b, "DSD 512" 22579200 Hz
+>>>>>>>>>>>>>>>>&3	ubyte		6	\b, "DSD 1024" 45158400 Hz
 >>>>>>>>>>>>>>>>&3	default 	x	\b, unknown Hz
 >>>>>>>>>>>>>>>&0	default 	x	\b, unknown Hz
 >>>>>>>>>>>>>&0		default 	x	\b, unknown Hz
