@@ -181,12 +181,13 @@
 # DSD bit depth
 >>>>>&0	string			x		\b, 1 bit
 >>>>24	default 		x
-# PCM bit depth ( upper limits )
-# exact bit depths are not present in the static header
->>>>>24	ulelong&0x00000003	0x00000000	\b, 8 bit
->>>>>24	ulelong&0x00000003	0x00000001	\b, 16 bit
->>>>>24	ulelong&0x00000003	0x00000002	\b, 24 bit
->>>>>24	ulelong&0x00000003	0x00000003	\b, 32 bit
+# PCM bit depth
+>>>>>24	ulelong&0x0003e003	0x00000000	\b, 8 bit
+>>>>>24	ulelong&0x0003e003	0x00008001	\b, 12 bit
+>>>>>24	ulelong&0x0003e003	0x00000001	\b, 16 bit
+>>>>>24	ulelong&0x0003e003	0x00008002	\b, 20 bit
+>>>>>24	ulelong&0x0003e003	0x00000002	\b, 24 bit
+>>>>>24	ulelong&0x0003e003	0x00000003	\b, 32 bit
 
 # channels
 >>>>&0		string
