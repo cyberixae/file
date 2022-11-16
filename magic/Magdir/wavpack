@@ -265,8 +265,36 @@
 >>>>>>24	ulelong&0x07800000	0x06000000	\b, 88200 Hz
 >>>>>>24	ulelong&0x07800000	0x06800000	\b, 96000 Hz
 >>>>>>24	ulelong&0x07800000	0x07000000	\b, 192000 Hz
-# sub block storing custom sample rates is hard to reach
->>>>>>24	ulelong&0x07800000	0x07800000	\b, unknown Hz
+>>>>>>24	ulelong&0x07800000	0x07800000
+# sample rate stored in sub blocks
+>>>>>>>32			ubyte		&0x28
+# alt extension sub block
+>>>>>>>>&(&0.B*2)		ubyte		x
+>>>>>>>>>&0			ubyte&0xaf		0x21
+# riff header sub block
+>>>>>>>>>>&(&0.B*2)		ubyte		x
+>>>>>>>>>>>&0			ubyte&0xaf		0x02
+# decor terms sub block
+>>>>>>>>>>>>&(&0.B*2)		ubyte		x
+>>>>>>>>>>>>>&0			ubyte&0xaf		0x03
+# decor weights sub block
+>>>>>>>>>>>>>>&(&0.B*2)		ubyte		x
+>>>>>>>>>>>>>>>&0		ubyte&0xaf		0x04
+# decor samples sub block
+>>>>>>>>>>>>>>>>&(&0.B*2)	ubyte		x
+>>>>>>>>>>>>>>>>>&0		ubyte&0xaf		0x05
+# entropy vars sub block
+>>>>>>>>>>>>>>>>>>&(&0.B*2)	ubyte		x
+>>>>>>>>>>>>>>>>>>>&0		ubyte&0xaf		0x27
+# sample rate sub block
+>>>>>>>>>>>>>>>>>>>>&0		ubyte*2		4
+# 4 byte sample rate buffer
+>>>>>>>>>>>>>>>>>>>>>&-2	ubyte&0x40		0x40
+# 3 byte field with padding
+>>>>>>>>>>>>>>>>>>>>>>&1	ulelong&0xffffff	x	\b, %u Hz
+>>>>>>>>>>>>>>>>>>>>>&-2	default			x
+# 4 byte field with no padding
+>>>>>>>>>>>>>>>>>>>>>>&1	ulelong			x	\b, %u Hz
 
 # compression
 >>>>24		ulelong&0x00000008	0x00000000	\b, lossless compression
