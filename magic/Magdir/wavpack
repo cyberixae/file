@@ -19,6 +19,12 @@
 
 # v0 / audio format
 
+# samples
+>>&4		string
+# sample count was not recorded in header before 0.3
+>>>&0		uleshort&0xff		>2
+>>>>&6		ulelong			x		\b, %u samples
+
 # read format from RIFF header
 >>>12		search			fmt\x20
 
@@ -92,6 +98,12 @@
 #>>>&-2		uleshort&0xff		x		v0.%u
 
 # v0 raw / audio format
+
+# samples
+>>&0		string
+# sample count was not recorded in header before 0.3
+>>&-2		uleshort&0xff		>2
+>>>&6		ulelong			x		\b, %u samples
 
 # bit depth (always 16 in v0 raw mode)
 >>&0		string 			x		\b, 16 bit
@@ -174,6 +186,11 @@
 #>>>>&0	uleshort&0xff		x		v4.%u
 
 # v4 / audio format
+
+# samples
+>>>8	string
+>>>>10	uleshort		0
+>>>>>12	ulelong			x		\b, %u samples
 
 # bit depth
 >>>8	string
